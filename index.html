@@ -2,70 +2,110 @@
 <html>
     <head>
         <title>A console.log Hangman Game</title>
+        <script type="text/javascript" src="hangman-utils.js"></script>
+        <script type="text/javascript" src="hangman-game-logic.js"></script>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <style type="text/css">
+            body {
+                font-size: 40px;
+            }
+            form {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 550px;
+            }
+            .letters{
+                margin-right:5px;
+                cursor: pointer;
+                color: blue;
+            }
+            .clicked{
+                color: grey;
+                cursor:default;
+            }
+            .lost {
+                background-color:red;
+            }
+            #current-phrase {
+                font-size: 60px;
+            }
+        </style>
     </head>
     <body>
-        Open up the console to see the game!
-        <script src="hangman-utils.js"></script>
-        
+        <div id="setup">
+            <form>
+                <br>
+                <label for="phrase">Type in your secret phrase:</label>
+                <br>
+                <input id="phrase" type="text" name="phrase"/>
+                <br>
+                <input id="play" type="submit"></input>
+            </form>
+
+        </div>
+        <div id="game" style="display:none;">
+            <div id=state>
+                <div id="current-phrase"></div>
+                <div id="current-hangman"></div>
+            </div>
+            <div id="letters">
+            </div>
+
+        </div>
         <script>
             (function() {
-                'use strict'
-                /////////////////////////////////////////////////
-                // Variable declaration
-                /////////////////////////////////////////////////
-                var phrase, guess, charactersGuessed, displayCurrent
-                    ;
-                    
-                /////////////////////////////////////////////////
-                // Variable initialization
-                /////////////////////////////////////////////////
-                phrase = "learn to program";
-                
-                charactersGuessed = [];
-                guess = function(character) {
-                    charactersGuessed.push(character);
-                    displayCurrent();
-                }
-                
-                displayCurrent = function() {
-                    var displayedPhrase, unknownLettersRemaining;
-                    /////////////////////////////////////////////////
-                    unknownLettersRemaining = 0;
-                    
-                    displayedPhrase = window.hangman.forEachLetter(phrase, function(character) {
-                        if(character === " ") {
-                            return character;
-                        } else if (window.hangman.contains(charactersGuessed, character)) {
-                            return character;   
-                        } else {
-                            unknownLettersRemaining = unknownLettersRemaining + 1;
-                            return "-"; 
+                'use strict';
+                var letters, guessAndUpdateView, maxIncorrect, setUpGame;
+
+                letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                maxIncorrect = 7;
+                guessAndUpdateView = function (character){
+                    var current, numLeft;
+                    current = guess(character);
+                    numLeft = maxIncorrect-current.numIncorrect;
+                    $('#current-phrase').html(current.secretState);
+                    $('#current-hangman').html("Guesses left: " + numLeft);
+                    if(numLeft<=0){
+                        $('#letters').html('You Lost!')
+                            .addClass('lost');
+                    }
+                };
+
+                $('#play').click(function(e){
+                    e.preventDefault();
+                    setUpGame();
+                    guessAndUpdateView();
+
+                });
+                setUpGame = function() {
+                    setPhrase($('#phrase').val());
+                    $('#setup').hide();
+                    $('#game').show();
+
+                    window.hangman.forEachLetter(letters, function(letter){
+                        $('#letters').append($("<label>")
+                            .attr("class", "letters")
+                            .attr("id","letter-"+letter)
+                            .text(letter)
+                        );
+
+                        $('#letter-' + letter).click(function(){
+                            guessAndUpdateView(letter);
+                            $('#letter-' + letter).attr("class","clicked")
+                                .off();
+                        });
+                    });
+                    $("html").keypress(function (e) {
+                        var letterPressed;
+                        letterPressed = String.fromCharCode(e.which).toUpperCase();
+                        if(letters.indexOf(letterPressed)!=-1){
+                            $('#letter-' + letterPressed).trigger("click");
                         }
                     });
-                    /////////////////////////////////////////////////
-                    console.log("Currently:", displayedPhrase);
-                    console.log("So far you've guessed ", charactersGuessed);
-                    
-                    if(unknownLettersRemaining === 0) {
-                        console.log("You win!");
-                        window.hangman.cornifyTimes(4);
-                    }
-                }
-                
-                /////////////////////////////////////////////////
-                // Do Stuff
-                /////////////////////////////////////////////////
-                console.log("Welcome to hangman! There is a secret phrase");
-                console.log("Commands you can use: guess('a')");
-                
-                displayCurrent();
-                
-                /////////////////////////////////////////////////
-                // Export variables
-                /////////////////////////////////////////////////
-                window.guess = guess;
-                window.displayCurrent = displayCurrent;
-            })();   
+                };
+            })();
         </script>
     </body>
-</html> 
+</html>
