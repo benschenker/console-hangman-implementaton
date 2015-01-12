@@ -73,12 +73,6 @@
                     }
                 };
 
-                $('#play').click(function(e){
-                    e.preventDefault();
-                    setUpGame();
-                    guessAndUpdateView();
-
-                });
                 setUpGame = function() {
                     setPhrase($('#phrase').val());
                     $('#setup').hide();
@@ -105,6 +99,12 @@
                         }
                     });
                 };
+                $('#play').click(function(e){
+                    e.preventDefault();
+                    setUpGame();
+                    guessAndUpdateView();
+
+                });
             })();
         </script>
     </body>
