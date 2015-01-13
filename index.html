@@ -50,6 +50,17 @@
                     window.hangman.logic.setPhrase( $('#phrase').val() );
                     $('#setup').hide();
                     $('#game').show();
+
+                    window.hangman.util.forEachLetter(letters, function(letter){
+                        $('#letters').append( $('<label>')
+                            .attr('class','labels')
+                            .attr('id','letter-' + letter)
+                            .text(letter)
+                        );
+                        $("#letter-" + letter).click( function() {
+                            guessAndUpdateView(letter);
+                        });
+                    });
                 };
 
                 // When button is clicked, set up game and then update view
