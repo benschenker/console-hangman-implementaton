@@ -10,14 +10,15 @@
     /////////////////////////////////////////////////
     setPhrase = function(text) {
         if(phrase){
-            return "Oh no, you already set the phrase!";
+            return false;
         } else {
-            phrase = text.toUpperCase();
-            return "Congrats, you set the phrase!";
+            phrase = text.replace(/[^A-Za-z ]+/g, '').toUpperCase();
+            return true;
         }
     };
 
     charactersGuessed = [];
+
     guess = function(character) {
         if(character) {
             charactersGuessed.push(character.toUpperCase());
@@ -73,8 +74,26 @@
     // Export variables
     /////////////////////////////////////////////////
     window.hangman.logic = {
+        /*
+        guess
+            Inputs
+                character - a character that is to be guessed to be part of the phrase
+            Outputs
+                {
+                    secretState - a string showing the phrase, only revealing 
+                                characters that have been guessed
+                    numIncorrect - the number of incorrect guesses so far
+                }
+        */
         guess: guess,
-        displayCurrent: displayCurrent,
+        /*
+        setPhrase
+            Inputs
+                text - a string that the secret phrase is set to
+            Outputs
+                true if successful
+                false if phrase has already been set
+        */
         setPhrase: setPhrase
     };
 })();
