@@ -28,6 +28,10 @@
             .lost {
                 background-color:red;
             }
+            label, .label {
+                display: block; 
+                color: black;
+            }
             #current-phrase {
                 font-size: 60px;
             }
@@ -36,11 +40,10 @@
     <body>
         <div id="setup">
             <form>
-                <br>
-                <label for="phrase">Type in your secret phrase:</label>
-                <br>
-                <input id="phrase" type="text" name="phrase"/>
-                <br>
+                <label>
+                   <span class="label">Type in your secret phrase:</span>
+                   <input id="phrase" type="text" name="phrase"/>
+               </label>
                 <input id="play" type="submit"></input>
             </form>
 
