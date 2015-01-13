@@ -10,7 +10,12 @@
     </head>
     <body>
         <div id="setup">
-            <!--Put a textbox here with a button-->
+            <label>
+                <span>What is your secret?</span>
+                <input type='text' id='phrase' />
+            </label>
+
+            <button id='play'>Submit</button>
         </div>
         <div id="game" style="display:none;">
             <div id="current-phrase"></div>
@@ -33,15 +38,21 @@
                 };
 
                 /*
+                Set the phrase
                 Toggle the game view
                 Insert the letters into the letters div
                 Create event handlers for the letters
                 */
                 setUpGame = function () {
+                    $('#setup').hide();
+                    $('#game').show();
                 };
 
-                // When button is clicked, set up game and update view
-                
+                // When button is clicked, set up game and then update view
+                $('#play').click(function(){
+                    setUpGame();
+                    guessAndUpdateView();
+                });
             })();
         </script>
     </body>
