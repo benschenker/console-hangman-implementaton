@@ -35,6 +35,9 @@
                 Detect loss
                 */
                 guessAndUpdateView = function (character) {
+                    var state;
+                    state = window.hangman.logic.guess(character);
+                    $('#current-hangman').text(state.secretState);
                 };
 
                 /*
@@ -44,6 +47,7 @@
                 Create event handlers for the letters
                 */
                 setUpGame = function () {
+                    window.hangman.logic.setPhrase( $('#phrase').val() );
                     $('#setup').hide();
                     $('#game').show();
                 };
