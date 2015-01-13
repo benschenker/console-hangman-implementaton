@@ -72,7 +72,7 @@
                 };
 
                 setUpGame = function() {
-                    window.hangman.logic.setPhrase($('#phrase').val());
+                    window.hangman.logic.setPhrase( $('#phrase').val() );
                     $('#setup').hide();
                     $('#game').show();
 
@@ -89,6 +89,7 @@
                                 .off();
                         });
                     });
+                    
                     $("html").keypress(function (e) {
                         var letterPressed;
                         letterPressed = String.fromCharCode(e.which).toUpperCase();
@@ -97,10 +98,10 @@
                         }
                     });
                 };
+                
                 $('#play').click(function(e){
                     setUpGame();
                     guessAndUpdateView();
-
                 });
             })();
         </script>
