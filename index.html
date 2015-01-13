@@ -25,19 +25,25 @@
         <script>
             (function() {
                 'use strict';
-                var letters, guessAndUpdateView, setUpGame;
+                var letters, maxIncorrect, guessAndUpdateView, setUpGame;
 
                 letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
+                maxIncorrect = 7;
                 /*
                 Perform a guess on character
                 Retrieve and display the updated view
                 Detect loss
                 */
-                guessAndUpdateView = function (character) {
-                    var state;
+                guessAndUpdateView = function (character){
+                    var state, numLeft;
                     state = window.hangman.logic.guess(character);
-                    $('#current-hangman').text(state.secretState);
+                    numLeft = maxIncorrect - state.numIncorrect;
+                    $('#current-phrase').text(state.secretState);
+                    $('#current-hangman').text("Guesses left: " + numLeft);
+                    if(numLeft < 1){
+                        $('#letters').text('You Lost!')
+                            .addClass('lost');
+                    }
                 };
 
                 /*
@@ -53,12 +59,14 @@
 
                     window.hangman.util.forEachLetter(letters, function(letter){
                         $('#letters').append( $('<label>')
-                            .attr('class','labels')
+                            .attr('class','letters')
                             .attr('id','letter-' + letter)
                             .text(letter)
                         );
                         $("#letter-" + letter).click( function() {
                             guessAndUpdateView(letter);
+                            $('#letter-' + letter).attr("class","clicked")
+                                .off();
                         });
                     });
                 };
