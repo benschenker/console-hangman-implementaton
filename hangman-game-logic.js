@@ -31,17 +31,17 @@
         unknownLettersRemaining = 0;
         numIncorrect = 0;
 
-        displayedPhrase = window.hangman.forEachLetter(phrase, function(character) {
+        displayedPhrase = window.hangman.util.forEachLetter(phrase, function(character) {
             if(character === " ") {
                 return character;
-            } else if (window.hangman.contains(charactersGuessed, character)) {
+            } else if (window.hangman.util.contains(charactersGuessed, character)) {
                 return character;
             } else {
                 unknownLettersRemaining = unknownLettersRemaining + 1;
                 return "-";
             }
         });
-        window.hangman.forEachLetter(
+        window.hangman.util.forEachLetter(
             charactersGuessed.join(''), function(character) {
                 if (phrase.indexOf(character)===-1) {
                     numIncorrect++;
@@ -53,7 +53,7 @@
 
         if(unknownLettersRemaining === 0) {
             console.log("You win!");
-            window.hangman.cornifyTimes(4);
+            window.hangman.util.cornifyTimes(4);
         }
         return {
             secretState: displayedPhrase,
@@ -72,7 +72,9 @@
     /////////////////////////////////////////////////
     // Export variables
     /////////////////////////////////////////////////
-    window.guess = guess;
-    window.displayCurrent = displayCurrent;
-    window.setPhrase = setPhrase;
+    window.hangman.logic = {
+        guess: guess,
+        displayCurrent: displayCurrent,
+        setPhrase: setPhrase
+    };
 })();

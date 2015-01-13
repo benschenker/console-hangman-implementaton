@@ -10,7 +10,7 @@
             body {
                 font-size: 40px;
             }
-            form {
+            #setup {
                 display: block;
                 margin-left: auto;
                 margin-right: auto;
@@ -39,23 +39,18 @@
     </head>
     <body>
         <div id="setup">
-            <form>
-                <label>
-                   <span class="label">Type in your secret phrase:</span>
-                   <input id="phrase" type="text" name="phrase"/>
-               </label>
-                <button id="play" type="button">Submit</button>
-            </form>
-
+            <label>
+               <span class="label">Type in your secret phrase:</span>
+               <input id="phrase" type="text" name="phrase"/>
+           </label>
+            <button id="play" type="button">Submit</button>
         </div>
         <div id="game" style="display:none;">
             <div id=state>
                 <div id="current-phrase"></div>
                 <div id="current-hangman"></div>
             </div>
-            <div id="letters">
-            </div>
-
+            <div id="letters"></div>
         </div>
         <script>
             (function() {
@@ -66,22 +61,22 @@
                 maxIncorrect = 7;
                 guessAndUpdateView = function (character){
                     var current, numLeft;
-                    current = guess(character);
-                    numLeft = maxIncorrect-current.numIncorrect;
+                    current = window.hangman.logic.guess(character);
+                    numLeft = maxIncorrect - current.numIncorrect;
                     $('#current-phrase').html(current.secretState);
                     $('#current-hangman').html("Guesses left: " + numLeft);
-                    if(numLeft<=0){
+                    if(numLeft < 1){
                         $('#letters').html('You Lost!')
                             .addClass('lost');
                     }
                 };
 
                 setUpGame = function() {
-                    setPhrase($('#phrase').val());
+                    window.hangman.logic.setPhrase($('#phrase').val());
                     $('#setup').hide();
                     $('#game').show();
 
-                    window.hangman.forEachLetter(letters, function(letter){
+                    window.hangman.util.forEachLetter(letters, function(letter){
                         $('#letters').append($("<label>")
                             .attr("class", "letters")
                             .attr("id","letter-"+letter)
